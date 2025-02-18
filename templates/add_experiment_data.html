@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Data to Experiment</title>
+    <script>
+        function toggleFields() {
+            var dataType = document.getElementById("data_type").value;
+            var trialField = document.getElementById("trial_field");
+            var nameField = document.getElementById("name_field");
+            var statusField = document.getElementById("status_field");
+            var errorDetailsField = document.getElementById("error_details_field");
+            var epochsField = document.getElementById("epochs_field");
+
+            if (dataType === "metric" || dataType === "hyperparameter") {
+                trialField.style.display = "block";
+                nameField.style.display = "block";
+                statusField.style.display = "none";
+                errorDetailsField.style.display = "none";
+                epochsField.style.display = dataType === "hyperparameter" ? "block" : "none";
+            } else if (dataType === "trial") {
+                trialField.style.display = "none";
+                nameField.style.display = "none";
+                statusField.style.display = "block";
+                errorDetailsField.style.display = "none";
+                epochsField.style.display = "none";
+            } else {
+                trialField.style.display = "none";
+                nameField.style.display = "none";
+                statusField.style.display = "none";
+                errorDetailsField.style.display = "block";
+                epochsField.style.display = "none";
+            }
+        }
+
+        function updateTrials() {
+            var experimentId = document.getElementById("experiment_id").value;
+            var trialSelect = document.getElementById("trial_id");
+
+            fetch(`/get_trials?experiment_id=` + experimentId)
+                .then(response => response.json())
+                .then(data => {
+                    trialSelect.innerHTML = '<option value="">-- Select Trial --</option>';
+                    data.trials.forEach(trial => {
+                        var option = document.createElement("option");
+                        option.value = trial;
+                        option.textContent = trial;
+                        trialSelect.appendChild(option);
+                    });
+                });
+        }
+    </script>
+</head>
+<body>
+    <h1>Add Data to Existing Experiment</h1>
+
+    <form method="POST">
+        <!-- Select Experiment -->
+        <label for="experiment_id">Select Experiment:</label>
+        <select name="experiment_id" id="experiment_id" required onchange="updateTrials()">
+            <option value="">-- Select Experiment --</option>
+            {% for experiment in experiments %}
+                <option value="{{ experiment.id }}">{{ experiment.name }} ({{ experiment.id }})</option>
+            {% endfor %}
+        </select><br><br>
+
+        <!-- Select Data Type -->
+        <label for="data_type">Select Data Type:</label>
+        <select name="data_type" id="data_type" onchange="toggleFields()">
+            <option value="error">Error Log</option>
+            <option value="trial">New Trial</option>
+            <option value="metric">Metric</option>
+            <option value="hyperparameter">Hyperparameter</option>
+        </select><br><br>
+
+        <!-- Select Trial (only for Metric/Hyperparameter) -->
+        <div id="trial_field" style="display: none;">
+            <label for="trial_id">Select Trial:</label>
+            <select name="trial_id" id="trial_id">
+                <option value="">-- Select Trial --</option>
+            </select><br><br>
+        </div>
+
+        <!-- Name field (for Metrics and Hyperparameters) -->
+        <div id="name_field" style="display: none;">
+            <label for="name">Name:</label>
+            <input type="text" name="name"><br><br>
+        </div>
+
+        <!-- Status field (only for Trials) -->
+        <div id="status_field" style="display: none;">
+            <label for="status">Status:</label>
+            <select name="status">
+                <option value="Running">Running</option>
+                <option value="Completed">Completed</option>
+                <option value="Failed">Failed</option>
+            </select><br><br>
+        </div>
+
+        <!-- Error Details field (only for Error Logs) -->
+        <div id="error_details_field" style="display: none;">
+            <label for="error_details">Error Details:</label>
+            <textarea name="error_details"></textarea><br><br>
+        </div>
+
+        <!-- Epochs field (only for Hyperparameters) -->
+        <div id="epochs_field" style="display: none;">
+            <label for="epochs">Epochs:</label>
+            <input type="number" name="epochs"><br><br>
+        </div>
+
+        <!-- Input Value -->
+        <label for="value">Enter Value:</label>
+        <input type="text" name="value" required><br><br>
+
+        <button type="submit">Add Data</button>
+    </form>
+
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    {% if message %}
+        <p style="color: green;">{{ message }}</p>
+    {% endif %}
+
+    <br>
+    <a href="/">Back to Home</a>
+</body>
+</html>
+
+
+
