@@ -3,13 +3,6 @@ from database_operations import *
 import time
 
 class TestDatabaseOperations(unittest.TestCase):
-
-    #this test should fail
-    def test_insert_user_success_fail(self):
-        """Test inserting a user with valid inputs."""
-        insert_user("John", "Doe", "johndoe@example.com", "Admin")
-        result = fetch_data("SELECT * FROM User WHERE Email = ?", ("johndoe@example.com",))
-        self.assertTrue(len(result) < 0)
     
     def test_insert_user_missing_fields(self):
         """Test inserting a user with missing required fields."""
