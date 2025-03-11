@@ -177,7 +177,6 @@ class TestDatabaseOperations(unittest.TestCase):
 
     import time
 
-#not sure if below here works
 def test_bulk_insert_performance(self):
     """Test the performance of bulk user inserts."""
     users = [("User" + str(i), "Test", f"user{i}@test.com", "Member") for i in range(1000)]
