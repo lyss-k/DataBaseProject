@@ -34,7 +34,7 @@ def run_trial(C, kernel, gamma, X_train, X_test, y_train, y_test, exp_id):
         cur = conn.cursor()
         # Insert Trial
         trial_id = str(uuid.uuid4())
-        cur.execute("INSERT INTO Trial (Trial_ID, Experiment_ID, Status, StartTime, EndTime, Seed) VALUES (?, ?, ?, ?, ?, ?)", (trial_id, exp_id, 'completed', '2023-10-01 00:00:00', '2023-10-01 00:00:00', 42))
+        cur.execute("INSERT INTO Trial (Trial_ID, Experiment_ID, Status, StartTime, EndTime, Seed) VALUES (?, ?, ?, ?, ?, ?)", (trial_id, exp_id, 'completed', time.strftime('%Y-%m-%d %H:%M:%S'), time.strftime('%Y-%m-%d %H:%M:%S'), 42))
         # Insert Hyperparameters
         hp_id = str(uuid.uuid4())
         cur.execute("INSERT INTO Hyperparameter (Hyperparameter_ID, Trial_ID, type, epochs, value) VALUES (?, ?, ?, ?, ?)",
