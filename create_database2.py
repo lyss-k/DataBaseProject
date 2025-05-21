@@ -36,7 +36,7 @@ def create_database2(database_name="test.db", conn=None):
 
     CREATE TABLE IF NOT EXISTS Dataset (
         DataSet_ID TEXT PRIMARY KEY,
-        Name TEXT UNIQUE NOT NULL,
+        Name TEXT NOT NULL,
         Version INTEGER,
         Description TEXT NOT NULL,
         Storage_Location TEXT NOT NULL,
@@ -45,7 +45,7 @@ def create_database2(database_name="test.db", conn=None):
 
     CREATE TABLE IF NOT EXISTS Model (
         Model_ID TEXT PRIMARY KEY,
-        Name TEXT UNIQUE NOT NULL,
+        Name TEXT NOT NULL,
         Type TEXT NOT NULL,
         Version INTEGER,
         Hyperparameters TEXT,
@@ -54,7 +54,7 @@ def create_database2(database_name="test.db", conn=None):
 
     CREATE TABLE IF NOT EXISTS Experiment (
         Experiment_ID TEXT PRIMARY KEY,
-        Name TEXT UNIQUE NOT NULL,
+        Name TEXT NOT NULL,
         Author_ID TEXT NOT NULL,
         Description TEXT NOT NULL,
         StartTimeStamp DATETIME NOT NULL,
