@@ -18,103 +18,43 @@ In the development and deployment of machine learning (ML) models, maintaining a
 
 * Project Manager: Monitors project progress and make decisions based on experiment outcomes.
 
-## Use Cases
-
-### 1. Log New Experiment Data
-
-**Description:**  
-This use case involves logging a new machine learning experiment into the MLED.
-
-**Preconditions:**  
-- The user is authenticated.  
-- The system is operational.  
-
-**Trigger:**  
-- The data scientist initiates a new experiment.  
-
-**Main Flow:**  
-1. The user determines their model architecture, training dataset, hyperparameters, etc.  
-3. The user runs their experiment.  
-4. The user enters the experiment details into the user interface.  
-5. The system stores the experiment details in the database.  
-6. The system generates a unique experiment ID.  
-7. The system confirms successful logging.  
-
-**Postconditions:**  
-- The experiment is stored in the MLED with a unique ID.  
-- The experiment details are available for querying and analysis.  
-
----
-
-### 2. Query Experiment Results
-
-**Description:**  
-This use case involves querying past experiment results to compare performance metrics.  
-
-**Preconditions:**  
-- The user is authenticated.  
-- The system has experiment data stored.  
-- The system is operational.  
-
-**Trigger:**  
-- The user initiates a query.  
-
-**Main Flow:**  
-1. The system presents a query interface.  
-2. The user specifies search criteria (e.g., experiment name, date range, performance metrics).  
-3. The system processes the query.  
-4. The system retrieves matching experiment records.  
-5. The system displays the results to the user.  
-
-**Postconditions:**  
-- The user views the queried experiment results.  
-- The user can export or analyze the results further.  
-
----
-
-### 3. Review Compliance and Auditability
-
-**Description:**
-This use case involves querying past experiment results to review for meeting regulatory requirements.
-
-**Preconditions:**
-- The user is authenticated.
-- The system has experiment data stored.
-- Experiment logging includes timestamps, user roles, and detailed metadata.
-- The system is operational.
-  
-**Trigger:**
-- The auditor initiates a query.
-  
-**Main Flow:**
-1. The system presents a query interface.
-2. The user specifies search criteria (e.g., experiment name, date range, performance metrics).
-3. The system processes the query.
-4. The system retrieves records including training data, hyperparameters, and results.
-5. The system generates a report for auditing.
-   
-**Postconditions:**
-- The user views the queried results.
-- Experiment logs are verified as compliant or flagged for review.
-
 ## Requirements
 
 ### Functional Requirements
 
-* Shall log and track machine learning experiments with unique IDs.
-* Shall store experiment metadata, including datasets, hyperparameters, and evaluation results.
-* Shall allow users to query based on metadata, metrics, or time range.
-* Shall allow users to compare past experiments.
-* Shall support version control for datasets and model artifacts.
-* Shall provide an interface for exporting experiment logs.
-* Shall allow users to recreate experiments with the same conditions.
-* Shall support multi-user access.
+* Must run experiment jobs in parallel across a defined hyperparameter grid
+* Must record experiment outputs to the OLTP database
+* Must detect new or updated records in the OLAP database since the last ETL run
+* Must transfer the delta records hourly to the OLAP database for consolidated storage
+* Must support retrieval of per-trial metric curves
+* Must enable joins and correlation functions
+* Must allow aggregation over metrics
+* Must enable users to narrow down experiment results by hyperparameter criteria
+* Must log ETL job metrics
 
 ### Non-Functional Requirements
-* Shall support scalability to handle a large number of experiments.
-* Shall provide a user-friendly interface for logging and querying experiments.
-* Shall maintain audit logs for compliance and reproducibility checks.
-* Shall offer clear error messages and diagnostics for issues.
+* Shall support parallel execution scaling to utilize available CPU cores efficiently
+* Shall ensure ETL jobs complete within the 1 hour window under expected data volumes
+* Shall guarantee exactly one load semantics to avoid duplicates in the analytical DB
+* Shall provide clear error reporting
+
+## Literature Review
+For our literature review we were encouraged to use a “deep research” tool to assist us in find relevant sources and summarizing them. To this end, we used the OpenAI ChatGPT 4o model and its deep research tool to compile our literature review. On top of using a deep research tool, part of the assignment was to select a few of the chosen sources and highlight a few areas that the LLM missed or glossed over. The papers chosen were a “Framework for Implementing Experiment Tracking in Machine Learning Development” by Abhishek Shivanna and “DuckDB: an Embeddable Analytical Database” by Mark Raasveldt.
+
+ For the paper by Abhishek Shivanna, ChatGPT does a decent job at summarizing by telling the reader about Shivanna’s arguments and reasoning for the necessity of ML experiment tracking as well as stating what sorts of data needs to be stored (model architecture, hyperparameters, dataset version, and code versions). What ChatGPT fails to mention is that Shivanna provides, in the last half of her article, an in-depth breakdown of the ML fields that most require experiment tracking, as well as the specific aspects of each experiment that need to be tracked. For example, Shivanna rightfully states that Reinforcement Learning would benefit greatly from an experiment tracking mechanism to log data such as Episode returns and lengths, Total environment steps, Value and policy function losses, Aggregate statistics across multiple environments, Exploration strategies and their effectiveness. And Reward shaping details. Overall, though, ChatGPT does well in summarizing this paper.
+ 
+In regard to the DuckDB paper, ChatGPT provides a good overview of why DuckDB is useful, highlighting that it runs “within the same process as the ML pipeline” and that it is essentially “SQLite for analytics”. What ChatGPT fails to mention is the more technical aspect of DuckDB such as how it is built on C/C++ as well as SQLite APIs, uses a cost-based optimizer, and a serializable MVCC concurrency control mechanism. Additionally, Raasveldt highlights the requirements for embedded analytical databases such as high efficiency for OLAP workloads, high stability, efficient transfer of tables, and embeddability in the ML process.
+
+## System Architecture (DAG)
+
+## Tech Stack
+
+## Parallelization
+* used lock to ensure writes didn't interfere with one another
+* used to test different hyperparameters
+* 
+
+## Pipeline
 
 ## Entity Relationship Diagram
 
