@@ -10,11 +10,9 @@ In the development and deployment of machine learning (ML) models, maintaining a
 
 * Data Scientist: A user who conducts experiments, tracks results, and queries the database.
 
-* ML Engineer: A user responsible for deploying models and managing infrastructure.
+* Data Engineer: A user responsible for deploying models and managing infrastructure.
 
-* Auditor: A user who reviews experiments for compliance and reproducibility.
-
-* MLED System: The database system that stores and manages experiment data.
+* Scheduler Service: Responsible for scheduling batches
 
 * Project Manager: Monitors project progress and make decisions based on experiment outcomes.
 
