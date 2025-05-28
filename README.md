@@ -6,15 +6,13 @@ In the development and deployment of machine learning (ML) models, maintaining a
 
 ## Use Case Diagram and Actors
 
-![Use Case Diagram](UseCaseDiagram.PNG)
+![Use Case Diagram](user.png)
 
 * Data Scientist: A user who conducts experiments, tracks results, and queries the database.
 
-* ML Engineer: A user responsible for deploying models and managing infrastructure.
+* Data Engineer: A user responsible for deploying models and managing infrastructure.
 
-* Auditor: A user who reviews experiments for compliance and reproducibility.
-
-* MLED System: The database system that stores and manages experiment data.
+* Scheduler Service: Responsible for scheduling batches
 
 * Project Manager: Monitors project progress and make decisions based on experiment outcomes.
 
@@ -47,7 +45,12 @@ In regard to the DuckDB paper, ChatGPT provides a good overview of why DuckDB is
 
 ## System Architecture (DAG)
 
+![DAG](DAG.png)
+
 ## Tech Stack
+
+![Tech Stack](techstack.png)
+![Chart Teck Stack](charttechstack.png)
 
 ## Parallelization
 * used lock to ensure writes didn't interfere with one another
