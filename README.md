@@ -6,7 +6,7 @@ In the development and deployment of machine learning (ML) models, maintaining a
 
 ## Use Case Diagram and Actors
 
-![Use Case Diagram](UseCaseDiagram.PNG)
+![Use Case Diagram](user.png)
 
 * Data Scientist: A user who conducts experiments, tracks results, and queries the database.
 
@@ -47,7 +47,12 @@ In regard to the DuckDB paper, ChatGPT provides a good overview of why DuckDB is
 
 ## System Architecture (DAG)
 
+![DAG](DAG.png)
+
 ## Tech Stack
+
+![Tech Stack](techstack.png)
+![Chart Teck Stack](charttechstack.png)
 
 ## Parallelization
 * used lock to ensure writes didn't interfere with one another
