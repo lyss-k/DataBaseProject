@@ -58,6 +58,16 @@ In regard to the DuckDB paper, ChatGPT provides a good overview of why DuckDB is
 * 
 
 ## Pipeline
+This project includes an automated ETL (Extract, Transform, Load) pipeline built using Prefect, designed to extract experimental data from a transactional SQLite database and load it into a DuckDB-based analytics layer. We implemented every step within the DAG. The pipeline runs every hour and ensures only new or updated experiments from the last hour are processed. Some things we had to adjust and take into consideration:
+
+* We performed a left join of the experiments table with the author, dataset, model, trial, hyperparamter, and metric tables. We then created a large composite key from the primary keys of these tables. Using just the experiment and trial IDs as a composite key led to the deletion of valuable data when removing duplicate composite keys.
+
+* Storing the data in a single wide table allows for faster analytical queries as all of the data that we know we will be interested in is all in one place. By performing the joins before insertion into duckDB, we avoid performing those costly operations when performing analytical tasks.
+
+* DuckDB is a columnar-style database, so storing the data as a single table with many columns is better for DuckDB to query efficiently.
+
+* The denormalization of data simplifies the query logic as the user does not have to keep track of a strict 3rd Normal Form structure
+
 
 ## Entity Relationship Diagram
 
