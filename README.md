@@ -73,20 +73,20 @@ This project includes an automated ETL (Extract, Transform, Load) pipeline built
 ## Streamlit Interface
 This Streamlit interface provides a visual dashboard for exploring machine learning experiment data stored in a DuckDB database. It's designed to help researchers and practitioners analyze trials, hyperparameters, and model performance metrics in an interactive, user-friendly way.
 
-* DuckDB Integration
+DuckDB Integration
 - Connects directly to a DuckDB .duckdb file — no CSVs or external uploads required.
 
-* Experiment Filtering
+Experiment Filtering
 - Use sidebar filters to select and focus on specific experiments by name.
 
-* Metrics Visualization
+Metrics Visualization
 - Line chart of selected metric values over time
 - Bar chart for analyzing hyperparameter impact on performance
 
-* Model & Dataset Overview
+Model & Dataset Overview
 - Shows the dataset versions and sizes used in experiments.
 
-* Schema-aware & Dynamic
+Schema-aware & Dynamic
 - Automatically reads available tables and supports general SQL queries.
 
 ## Entity Relationship Diagram
