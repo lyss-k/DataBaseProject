@@ -1,0 +1,6 @@
+2025-05-28 15:02:23 | Type: FULL | Extracted: 768 | Pre-Load: 0 | Post-Dedup: 768
+2025-05-28 15:02:53 | Type: HOURLY | Extracted: 0 | Pre-Load: 768 | Post-Dedup: 768
+2025-05-28 15:04:30 | Type: HOURLY | Extracted: 0 | Pre-Load: 768 | Post-Dedup: 768
+2025-05-28 15:10:10 | Type: HOURLY | Extracted: 1536 | Pre-Load: 768 | Post-Dedup: 1536
+2025-05-29 13:17:50 | Type: FULL | Extracted: 1569 | Pre-Load: 1536 | Post-Dedup: 1569
+2025-05-29 13:23:13 | Type: FULL | Extracted: 1713 | Pre-Load: 1569 | Post-Dedup: 1713

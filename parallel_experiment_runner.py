@@ -12,6 +12,9 @@ import uuid
 import time
 from filelock import FileLock
 import os
+from datetime import datetime
+
+SQLITE_FILE_PATH = "MLED_transactions.db"
 
 # Function to run one experiment
 def run_trial(C, kernel, gamma, X_train, X_test, y_train, y_test, exp_id):
@@ -27,10 +30,10 @@ def run_trial(C, kernel, gamma, X_train, X_test, y_train, y_test, exp_id):
         'f1': f1_score(y_test, y_pred, average='weighted')
     }
     #file base lock
-    lock_path = os.path.abspath("test.db.lock")
+    lock_path = os.path.abspath(SQLITE_FILE_PATH + ".lock")
     with FileLock(lock_path):
         # Insert into DB
-        conn = sqlite3.connect('test.db')
+        conn = sqlite3.connect(SQLITE_FILE_PATH)
         cur = conn.cursor()
         # Insert Trial
         trial_id = str(uuid.uuid4())
@@ -55,11 +58,12 @@ def run_trial(C, kernel, gamma, X_train, X_test, y_train, y_test, exp_id):
     return exp_id, metrics
 
 def __main__():
-    startTime = time.time()
+    # startTime = time.time()
+    startTime = datetime.now()
     #create experiment id
     exp_id = str(uuid.uuid4())
     #create connection to db
-    conn = sqlite3.connect('test.db')
+    conn = sqlite3.connect(SQLITE_FILE_PATH)
     #create cursor
     cur = conn.cursor()
     # Parameters
@@ -91,22 +95,27 @@ def __main__():
     
     #run trials in parallel
     results = Parallel(n_jobs=4)(delayed(run_trial)(C, kernel, gamma, X_train, X_test, y_train, y_test, exp_id) for C, kernel, gamma in combinations)
-    endTime = time.time()
+    # endTime = time.time()
+    endTime = datetime.now()
+
 
     #create connection to db
-    conn = sqlite3.connect('test.db')
+    conn = sqlite3.connect(SQLITE_FILE_PATH)
     #create cursor
     cur = conn.cursor()
 
     # Insert Experiment
     cur.execute("INSERT INTO Experiment (Experiment_ID, Name, Author_ID, Description, StartTimeStamp, EndTimeStamp, status, model_id, dataset_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                (exp_id, 'Lyssa', 'Iris SVM Experiment', 'Experiment with SVM on Iris dataset', startTime, endTime, 'completed', model_id, dataset_id))
+                (exp_id, 'Lyssa', 'Iris SVM Experiment', 'Experiment with SVM on Iris dataset', startTime.strftime('%Y-%m-%d %H:%M:%S'), endTime.strftime('%Y-%m-%d %H:%M:%S'), 'completed', model_id, dataset_id))
     
     print("Completed experiments:", results)
     #close connection
     conn.commit()
     conn.close()
     print("All trials completed in", endTime - startTime, "seconds")
+
+    print(startTime)
+    print(endTime)
 
 #run main
 if __name__ == "__main__":

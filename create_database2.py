@@ -118,6 +118,6 @@ def create_database2(database_name="test.db", conn=None):
 
 if __name__ == '__main__':
 
-    database = "test.db"
+    database = "MLED_transactions.db"
 
     create_database2(database)

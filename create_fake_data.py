@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 import uuid
 import random
 
-DATABASE = "test.db"
+DATABASE = "MLED_transactions.db"
 
 # Helper function to generate UUID
 def generate_uuid():
