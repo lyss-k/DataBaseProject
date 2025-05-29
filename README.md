@@ -55,7 +55,9 @@ In regard to the DuckDB paper, ChatGPT provides a good overview of why DuckDB is
 ## Parallelization
 * used lock to ensure writes didn't interfere with one another
 * used to test different hyperparameters
-* 
+* did 2 different NN experiments and an SVM experiment
+* limited on compute ability because of RL
+* allowed for different hyperparameters to be tested and analyzed
 
 ## Pipeline
 This project includes an automated ETL (Extract, Transform, Load) pipeline built using Prefect, designed to extract experimental data from a transactional SQLite database and load it into a DuckDB-based analytics layer. We implemented every step within the DAG. The pipeline runs every hour and ensures only new or updated experiments from the last hour are processed. Some things we had to adjust and take into consideration:
@@ -68,6 +70,24 @@ This project includes an automated ETL (Extract, Transform, Load) pipeline built
 
 * The denormalization of data simplifies the query logic as the user does not have to keep track of a strict 3rd Normal Form structure
 
+## Streamlit Interface
+This Streamlit interface provides a visual dashboard for exploring machine learning experiment data stored in a DuckDB database. It's designed to help researchers and practitioners analyze trials, hyperparameters, and model performance metrics in an interactive, user-friendly way.
+
+* DuckDB Integration
+- Connects directly to a DuckDB .duckdb file — no CSVs or external uploads required.
+
+* Experiment Filtering
+- Use sidebar filters to select and focus on specific experiments by name.
+
+* Metrics Visualization
+- Line chart of selected metric values over time
+- Bar chart for analyzing hyperparameter impact on performance
+
+* Model & Dataset Overview
+- Shows the dataset versions and sizes used in experiments.
+
+* Schema-aware & Dynamic
+- Automatically reads available tables and supports general SQL queries.
 
 ## Entity Relationship Diagram
 
