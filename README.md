@@ -29,6 +29,7 @@ In the development and deployment of machine learning (ML) models, maintaining a
 * Must allow aggregation over metrics
 * Must enable users to narrow down experiment results by hyperparameter criteria
 * Must log ETL job metrics
+* Must provide interactive visualization of results
 
 ### Non-Functional Requirements
 * Shall support parallel execution scaling to utilize available CPU cores efficiently
@@ -51,6 +52,24 @@ In regard to the DuckDB paper, ChatGPT provides a good overview of why DuckDB is
 
 ![Tech Stack](techstack.png)
 ![Chart Teck Stack](charttechstack.png)
+
+## Databases
+SQLite
+* used for logging experiments and trial metadata
+* hosted on premise (proof of concept)
+* no partitioning/replication
+* versioning: timestamps
+
+Duckdb
+* used for interactive querying by streamlit
+* hosted on premise (proof of concept), can easily be deployed using streamlit
+* format: parquet like internal structure
+* internal index optimization
+* schema: flat tables optimized for reads
+
+## Entity Relationship Diagram
+
+![Use Case Diagram](ERD.jpg)
 
 ## Parallelization
 * used lock to ensure writes didn't interfere with one another
@@ -89,6 +108,46 @@ This Streamlit interface provides a visual dashboard for exploring machine learn
 * Schema-aware & Dynamic
 - Automatically reads available tables and supports general SQL queries.
 
-## Entity Relationship Diagram
+## Expected Queries
+* get metrics by experiment
+* metrics over time, as experiments trained
+* hyperparameter analysis
+* dataset audit
 
-![Use Case Diagram](ERD.jpg)
+## Fault Tolerance
+* parallel write collision: file lock on DB file
+* training failure in job: try/except per trial
+* DB corruption: SQLite backup/restore
+* Streamlit crash: stateless reload
+
+## Data Synchronization
+Current
+* write serialization is handled by filelock for SQLite to prevent concurrent write issues
+* DuckDB is read only and decoupled from active training
+In the Future
+* use a message broker to capture environment events and coordinate asynchronous updates
+* switch to a PostgreSQL or a cloud-native DB to support concurrent writes and stronger consistency gaurentees
+* real-time UI updates instead of relaunching
+
+## Data Governance
+Current
+* single user, single machine setup
+* no role-based access control
+* all data visible on streamlit regardless of user
+In the Future
+* integrate authentication and authorization: admin, supervisor, researcher
+* implement project level resource tracking and cloud costs
+* store audit logs seperately
+
+## Limitations/Next Steps
+* no cloud storage or remote deployment yet
+* no automatic retraining, all initialized by users
+* privacy settings to make user data available only when logged in/to supervisors
+* UI currently read-only, no admin editing capabilities
+
+## Lessons Learned
+* file locking is essential for parallel DB writes
+* DuckDB is a powerful analytics engine with minimal setup
+* combining Streamlit and DuckDB offers low-overhead, good analytics
+* separation of write/read concerns is good; SQLite for transaction writes, DuckDB for analytical reads
+* schema-first logging paid off; structured schema simplified downstream querying and visualization
