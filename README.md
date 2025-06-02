@@ -130,14 +130,19 @@ In the Future
 * real-time UI updates instead of relaunching
 
 ## Data Governance
-Current
-* single user, single machine setup
-* no role-based access control
-* all data visible on streamlit regardless of user
-In the Future
-* integrate authentication and authorization: admin, supervisor, researcher
-* implement project level resource tracking and cloud costs
-* store audit logs seperately
+Data Scientist: A user who conducts experiments, tracks results, and queries the database.
+* needs read/write access to SQLite database
+* needs read access to DuckDB
+
+Data Engineer: A user responsible for deploying models and managing infrastructure.
+* needs read access to DuckDB
+
+Scheduler Service: Responsible for scheduling batches
+* needs read/write access to SQLite database
+* needs read/write access to DuckDB
+
+Project Manager: Monitors project progress and makes decisions based on experimental outcomes.
+* needs read/write access to DuckDB
 
 ## Limitations/Next Steps
 * no cloud storage or remote deployment yet
