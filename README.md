@@ -67,6 +67,12 @@ Duckdb
 * internal index optimization
 * schema: flat tables optimized for reads
 
+Important aspects
+* atomicity: if some writes occur but not all, and analyst won't get the full picture of experimental runs
+* durability: some of these ML experiments take a long time to run, so ensuring that once data is committed, it survives future failures is extremely important
+* important to avoid read-skews in the data, especially for future experimentation
+* read committed isolation is important: don't want to see partial experiments
+
 ## Entity Relationship Diagram
 
 ![Use Case Diagram](ERD.jpg)
@@ -88,6 +94,7 @@ This project includes an automated ETL (Extract, Transform, Load) pipeline built
 * DuckDB is a columnar-style database, so storing the data as a single table with many columns is better for DuckDB to query efficiently.
 
 * The denormalization of data simplifies the query logic as the user does not have to keep track of a strict 3rd Normal Form structure
+* Use unique batch/job identifier tracking to skip reprocessing
 
 ## Streamlit Interface
 This Streamlit interface provides a visual dashboard for exploring machine learning experiment data stored in a DuckDB database. It's designed to help researchers and practitioners analyze trials, hyperparameters, and model performance metrics in an interactive, user-friendly way.
@@ -128,6 +135,7 @@ In the Future
 * use a message broker to capture environment events and coordinate asynchronous updates
 * switch to a PostgreSQL or a cloud-native DB to support concurrent writes and stronger consistency gaurentees
 * real-time UI updates instead of relaunching
+* partitioning by key would be useful as the dataset grows
 
 ## Data Governance
 Data Scientist: A user who conducts experiments, tracks results, and queries the database.
